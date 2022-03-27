@@ -5,15 +5,19 @@ import PropTypes from 'prop-types';
 const propTypes = PropTypes;
 
 const Card = ({item}) => {
+  console.log(item)
   return (
     <View style={styles.container}>
-      <TouchableOpacity>
-        <Image
-          style={styles.image}
-          resizeMode="cover"
-          source={{uri: `data:image/jpg;base64,${item.base64}`}}
-        />
-      </TouchableOpacity>
+      {item && (
+        <TouchableOpacity>
+          <Image
+            style={styles.image}
+            resizeMode="cover"
+            source={{uri: item?.uri}}
+            //source={{uri: `data:image/jpg;base64,${item.base64}`}}
+          />
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
