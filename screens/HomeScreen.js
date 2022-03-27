@@ -9,21 +9,22 @@ const HomeScreen = () => {
   const openCamera = async () => {
     const options = {
       mediaType: 'photo',
-      cameraType: 'front',
-      includeBase64: 'true',
+      cameraType: 'back',
+      //includeBase64: 'true',
       includeExtra: true,
       saveToPhotos: true,
-      maxHeight: 300,
-      maxWidth: 300,
+      maxWidth: 8000,
+      maxHeight: 8000,
     };
-    const result = await launchCamera(options);
-    console.log(result);
+    await launchCamera(options, response => {
+      console.log(`response=> ${response}`);
+    }).then(response => console.log(response));
   };
 
   const openGallery = async () => {
     const options = {
       mediaType: 'photo',
-      includeBase64: true,
+      includeBase64: false,
       includeExtra: true,
       selectionLimit: 0,
     };
