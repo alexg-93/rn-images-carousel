@@ -4,11 +4,13 @@ module.exports = {
   rules: {
     'prettier/prettier': [
       'error',
-      {},
+      {
+        endOfLine: 'auto',
+      },
       {
         usePrettierrc: true,
       },
     ],
-    'no-trailing-spaces': ['error', {skipBlankLines: true}],
+    'no-trailing-spaces': ['error', { skipBlankLines: true }],
   },
 };

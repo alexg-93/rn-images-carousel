@@ -1,41 +1,59 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {useState} from 'react';
-import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
-import {List} from '../components/List';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+//import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
+import { List } from '../components/List';
+import ImagePicker from 'react-native-image-crop-picker';
 
 const HomeScreen = () => {
-  const [images, setImages] = useState(null);
+  const [fromGallery, setFromGallery] = useState([]);
+  const [fromCamera, setFromCamera] = useState([]);
+  const [images, setImages] = useState([]);
 
-  const openCamera = async () => {
-    const options = {
+  // useEffect(() => {
+  //   setImages([...fromGallery, ...fromCamera]);
+  // }, [fromCamera.length, fromGallery.length]);
+
+  const selectFromGallery = () => {
+    ImagePicker.openPicker({
+      width: 300,
+      height: 300,
+      cropping: false,
+      multiple: true,
+      includeExif: true,
       mediaType: 'photo',
-      cameraType: 'back',
-      //includeBase64: 'true',
-      includeExtra: true,
-      saveToPhotos: true,
-      maxWidth: 8000,
-      maxHeight: 8000,
-    };
-    await launchCamera(options, response => {
-      console.log(`response=> ${response}`);
-    }).then(response => console.log(response));
+      maxFiles: 10,
+    }).then(image => {
+      const galleryImages = [];
+      image.map(img => {
+        const data = img?.exif; //Object with data
+
+        if (data['{GPS}']) {
+          const metadata = data['{GPS}']; // get the index of the json or parse it to object first with JSON.parse()
+          const { Longitude, Latitude } = metadata;
+
+          //TODO : use this coordinates and show them
+        }
+        galleryImages.push(img);
+        setImages([...images, ...fromGallery, ...fromCamera, ...galleryImages]);
+      });
+
+      //setFromGallery([...fromGallery, ...galleryImages]);
+    });
   };
 
-  const openGallery = async () => {
-    const options = {
+  const openCamera = () => {
+    ImagePicker.openCamera({
+      width: 300,
+      height: 300,
+      cropping: false,
+      includeExif: true,
       mediaType: 'photo',
-      includeBase64: false,
-      includeExtra: true,
-      selectionLimit: 0,
-    };
-
-    launchImageLibrary(options);
-    const result = await launchImageLibrary(options);
-    const {assets} = result;
-
-    if (assets) {
-      setImages(assets);
-    }
+      //forceJpg: true,
+      writeTempFile: false,
+    }).then(image => {
+      // setFromCamera([...fromCamera, image]);
+      setImages([...images, ...fromCamera, ...fromGallery, image]);
+    });
   };
 
   return (
@@ -45,7 +63,9 @@ const HomeScreen = () => {
           <Text style={styles.text}>Take Photo</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.button} onPress={() => openGallery()}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => selectFromGallery()}>
           <Text style={styles.text}>Open Gallery</Text>
         </TouchableOpacity>
       </View>

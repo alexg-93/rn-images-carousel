@@ -1,11 +1,11 @@
 import React from 'react';
-import {View, StyleSheet, TouchableOpacity, Image} from 'react-native';
+import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import PropTypes from 'prop-types';
 
 const propTypes = PropTypes;
 
-const Card = ({item}) => {
-  console.log(item)
+const Card = ({ item }) => {
+ 
   return (
     <View style={styles.container}>
       {item && (
@@ -13,7 +13,8 @@ const Card = ({item}) => {
           <Image
             style={styles.image}
             resizeMode="cover"
-            source={{uri: item?.uri}}
+            source={{ uri: item?.path }}
+           // source={{ uri: item?.uri }}
             //source={{uri: `data:image/jpg;base64,${item.base64}`}}
           />
         </TouchableOpacity>
