@@ -1,17 +1,11 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useState, useEffect } from 'react';
-//import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import { List } from '../components/List';
 import ImagePicker from 'react-native-image-crop-picker';
+import GetLocation from 'react-native-get-location';
 
 const HomeScreen = () => {
-  const [fromGallery, setFromGallery] = useState([]);
-  const [fromCamera, setFromCamera] = useState([]);
   const [images, setImages] = useState([]);
-
-  // useEffect(() => {
-  //   setImages([...fromGallery, ...fromCamera]);
-  // }, [fromCamera.length, fromGallery.length]);
 
   const selectFromGallery = () => {
     ImagePicker.openPicker({
@@ -25,19 +19,9 @@ const HomeScreen = () => {
     }).then(image => {
       const galleryImages = [];
       image.map(img => {
-        const data = img?.exif; //Object with data
-
-        if (data['{GPS}']) {
-          const metadata = data['{GPS}']; // get the index of the json or parse it to object first with JSON.parse()
-          const { Longitude, Latitude } = metadata;
-
-          //TODO : use this coordinates and show them
-        }
         galleryImages.push(img);
-        setImages([...images, ...fromGallery, ...fromCamera, ...galleryImages]);
       });
-
-      //setFromGallery([...fromGallery, ...galleryImages]);
+      setImages([...images, ...galleryImages]);
     });
   };
 
@@ -48,11 +32,19 @@ const HomeScreen = () => {
       cropping: false,
       includeExif: true,
       mediaType: 'photo',
-      //forceJpg: true,
-      writeTempFile: false,
     }).then(image => {
-      // setFromCamera([...fromCamera, image]);
-      setImages([...images, ...fromCamera, ...fromGallery, image]);
+      GetLocation.getCurrentPosition({
+        enableHighAccuracy: true,
+        timeout: 15000,
+      })
+        .then(location => {
+          image.exif['{GPS}'] = location;
+          setImages([...images, image]);
+        })
+        .catch(error => {
+          const { code, message } = error;
+          console.warn(code, message);
+        });
     });
   };
 
