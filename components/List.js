@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { View, StyleSheet, FlatList, Animated } from 'react-native';
 import Card from './Card';
 import PropTypes from 'prop-types';
@@ -7,7 +7,7 @@ const propTypes = PropTypes;
 
 export const List = ({ data }) => {
   const renderItem = ({ item }) => {
-    return <Card item={item} key={item.path} />;
+    return <Card item={item} key={item.localIdentifier} />;
   };
 
   return (
@@ -18,11 +18,11 @@ export const List = ({ data }) => {
         renderItem={renderItem}
         horizontal={true}
         pagingEnabled
-        keyExtractor={item => item?.path}
+        keyExtractor={item => item?.localIdentifier}
         bounces={false}
         decelerationRate={0}
         snapToAlignment="center"
-        snapToInterval={340}
+        snapToInterval={320}
         scrollEventThrottle={16}
       />
     </View>
@@ -36,6 +36,6 @@ List.propTypes = {
 const styles = StyleSheet.create({
   carousel: {
     height: 350,
-    marginTop:50
+    marginTop: 50,
   },
 });

@@ -11,12 +11,13 @@ import PropTypes from 'prop-types';
 const propTypes = PropTypes;
 import CameraRoll from '@react-native-community/cameraroll';
 
-
 const Card = ({ item }) => {
   const { exif } = item;
-  async function deleteFile(localIdentifier) {
-    CameraRoll.deletePhotos([`ph://${localIdentifier}`]);
-  }
+
+  const deleteFile = () => {
+    //CameraRoll.deletePhotos([item.uri || `${item.localIdentifier}`]);
+    CameraRoll.deletePhotos([`${item.localIdentifier}`]);
+  };
 
   return (
     <>
@@ -27,8 +28,8 @@ const Card = ({ item }) => {
               <Image
                 style={styles.image}
                 resizeMode="cover"
-                source={{ uri: item?.path }}
-                // source={{ uri: item?.uri }}
+                // source={{ uri: item?.path }}
+                source={{ uri: item?.uri || item?.path }}
                 //source={{uri: `data:image/jpg;base64,${item.base64}`}}
               />
             </TouchableOpacity>
@@ -49,7 +50,7 @@ const Card = ({ item }) => {
               <Button
                 title="Delete"
                 color="black"
-                onPress={() => deleteFile(item.localIdentifier)}
+                onPress={() => deleteFile()}
               />
             </View>
           </>

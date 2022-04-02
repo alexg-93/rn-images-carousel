@@ -4,6 +4,7 @@ import { List } from '../components/List';
 import ImagePicker from 'react-native-image-crop-picker';
 import GetLocation from 'react-native-get-location';
 import CameraRoll from '@react-native-community/cameraroll';
+import { launchCamera } from 'react-native-image-picker';
 
 const HomeScreen = () => {
   const [images, setImages] = useState([]);
@@ -18,11 +19,7 @@ const HomeScreen = () => {
       mediaType: 'photo',
       maxFiles: 10,
     }).then(image => {
-      //const galleryImages = [];
-      image.map(img => {
-        setImages([...images, img]);
-      });
-      //setImages([...images, ...galleryImages]);
+      setImages([...images, ...image]);
     });
   };
 
@@ -50,10 +47,48 @@ const HomeScreen = () => {
     });
   };
 
+  const takePhoto = async () => {
+    const options = {
+      mediaType: 'photo',
+      maxWidth: 8000,
+      maxHeight: 8000,
+      includeExtra: true,
+      //saveToPhotos: true,
+      storageOptions: {
+        skipBackup: true,
+      },
+    };
+    const result = await launchCamera(options);
+    const { assets } = result;
+    const photos = [...assets];
+
+    GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 15000,
+    })
+      .then(async location => {
+        const { longitude, latitude } = location;
+        const localIdentifier = await CameraRoll.save(photos[0].uri); //return new localIndetifier
+
+        photos[0].exif = {};
+        photos[0].exif['{GPS}'] = {
+          Longitude: longitude,
+          Latitude: latitude,
+        };
+
+        photos[0].localIdentifier = localIdentifier;
+        setImages([...images, photos[0]]);
+      })
+      .catch(error => {
+        const { code, message } = error;
+        console.warn(code, message);
+      });
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.buttons}>
-        <TouchableOpacity style={styles.button} onPress={() => openCamera()}>
+        <TouchableOpacity style={styles.button} onPress={() => takePhoto()}>
           <Text style={styles.text}>Take Photo</Text>
         </TouchableOpacity>
 
