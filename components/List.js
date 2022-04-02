@@ -35,6 +35,7 @@ List.propTypes = {
 
 const styles = StyleSheet.create({
   carousel: {
-    height: 300,
+    height: 350,
+    marginTop:50
   },
 });

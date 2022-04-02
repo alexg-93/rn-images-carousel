@@ -10,12 +10,14 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-native-community/cameraroll": "^4.1.2",
+    "fbjs": "^3.0.4",
     "react": "17.0.2",
     "react-native": "0.67.4",
     "react-native-camera": "^4.2.1",
+    "react-native-fs": "^2.19.0",
     "react-native-get-location": "^2.2.1",
-    "react-native-image-crop-picker": "^0.37.3",
-    "react-native-image-picker": "^4.7.3"
+    "react-native-image-crop-picker": "^0.37.3"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

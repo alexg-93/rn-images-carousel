@@ -1,11 +1,22 @@
 import React from 'react';
-import { View, StyleSheet, TouchableOpacity, Image, Text } from 'react-native';
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  Text,
+  Button,
+} from 'react-native';
 import PropTypes from 'prop-types';
-
 const propTypes = PropTypes;
+import CameraRoll from '@react-native-community/cameraroll';
+
 
 const Card = ({ item }) => {
   const { exif } = item;
+  async function deleteFile(localIdentifier) {
+    CameraRoll.deletePhotos([`ph://${localIdentifier}`]);
+  }
 
   return (
     <>
@@ -22,7 +33,7 @@ const Card = ({ item }) => {
               />
             </TouchableOpacity>
 
-            {exif['{GPS}'] && (
+            {exif && exif['{GPS}'] && (
               <View style={styles.locationContainer}>
                 <Text style={styles.locationText}>
                   Longitude :{' '}
@@ -33,6 +44,14 @@ const Card = ({ item }) => {
                 </Text>
               </View>
             )}
+
+            <View style={styles.deleteButton}>
+              <Button
+                title="Delete"
+                color="black"
+                onPress={() => deleteFile(item.localIdentifier)}
+              />
+            </View>
           </>
         )}
       </View>
@@ -65,6 +84,16 @@ const styles = StyleSheet.create({
     fontSize: 15,
     alignSelf: 'flex-start',
     fontWeight: 'bold',
+  },
+  deleteButton: {
+    width: 100,
+    height: 40,
+    borderRadius: 10,
+    textAlign: 'center',
+    borderWidth: 1,
+    alignSelf: 'center',
+    position: 'absolute',
+    bottom: 0,
   },
 });
 

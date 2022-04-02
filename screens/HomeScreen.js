@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { List } from '../components/List';
 import ImagePicker from 'react-native-image-crop-picker';
 import GetLocation from 'react-native-get-location';
+import CameraRoll from '@react-native-community/cameraroll';
 
 const HomeScreen = () => {
   const [images, setImages] = useState([]);
@@ -17,11 +18,11 @@ const HomeScreen = () => {
       mediaType: 'photo',
       maxFiles: 10,
     }).then(image => {
-      const galleryImages = [];
+      //const galleryImages = [];
       image.map(img => {
-        galleryImages.push(img);
+        setImages([...images, img]);
       });
-      setImages([...images, ...galleryImages]);
+      //setImages([...images, ...galleryImages]);
     });
   };
 
@@ -40,6 +41,7 @@ const HomeScreen = () => {
         .then(location => {
           image.exif['{GPS}'] = location;
           setImages([...images, image]);
+          CameraRoll.save(image.path);
         })
         .catch(error => {
           const { code, message } = error;
