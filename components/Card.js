@@ -9,31 +9,21 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 const propTypes = PropTypes;
-import CameraRoll from '@react-native-community/cameraroll';
 
-const Card = ({ item }) => {
+const Card = ({ item, deleteFile }) => {
   const { exif } = item;
-
-  const deleteFile = () => {
-    try {
-      CameraRoll.deletePhotos([`${item.localIdentifier}`]);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
   return (
     <>
       <View style={styles.container}>
         {item && (
           <>
-            <TouchableOpacity>
+            <View style={styles.imageContainer}>
               <Image
                 style={styles.image}
                 resizeMode="cover"
                 source={{ uri: item?.uri || item?.path }}
               />
-            </TouchableOpacity>
+            </View>
 
             {exif && exif['{GPS}'] && (
               <View style={styles.locationContainer}>
@@ -49,9 +39,9 @@ const Card = ({ item }) => {
 
             <View style={styles.deleteButton}>
               <Button
-                title="Delete"
-                color="black"
-                onPress={() => deleteFile()}
+                title="❌"
+               // color="black"
+                onPress={() => deleteFile(item)}
               />
             </View>
           </>
@@ -67,35 +57,50 @@ Card.propTypes = {
 
 const styles = StyleSheet.create({
   container: {
-    //justifyContent: 'center',
-    padding: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
   },
   image: {
     width: 300,
-    height: 250,
+    height: 300,
     borderRadius: 20,
   },
+  imageContainer: {
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 8,
+    },
+    shadowOpacity: 0.5,
+    shadowRadius: 6,
+
+    elevation: 17,
+  },
   locationContainer: {
-    width: 300,
+    width: 250,
     flexDirection: 'column',
-    border: 1,
-    borderColor: 'black',
+    alignSelf: 'center',
     marginTop: 5,
   },
   locationText: {
-    fontSize: 15,
-    alignSelf: 'flex-start',
+    width: 250,
+    marginTop: 5,
+    fontSize: 12,
     fontWeight: 'bold',
+    borderRadius: 5,
+    padding: 5,
+    borderWidth: 1,
+    textAlign: 'center',
   },
   deleteButton: {
-    width: 100,
+    width: 40,
     height: 40,
-    borderRadius: 10,
-    textAlign: 'center',
-    borderWidth: 1,
-    alignSelf: 'center',
     position: 'absolute',
-    bottom: 0,
+    left: 15,
+    top: 5,
+    borderRadius: 50,
+    backgroundColor: 'white',
+    justifyContent: 'center',
   },
 });
 

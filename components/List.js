@@ -1,16 +1,30 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, FlatList, Animated } from 'react-native';
+import { View,StyleSheet,FlatList,Animated} from 'react-native';
 import Card from './Card';
 import PropTypes from 'prop-types';
+import CameraRoll from '@react-native-community/cameraroll';
 
 const propTypes = PropTypes;
 
-export const List = ({ data }) => {
-
+export const List = ({ data, setImages, isEnabled }) => {
   const renderItem = ({ item }) => {
-    return <Card item={item} key={item.localIdentifier} />;
+    return (
+      <Card item={item} key={item.localIdentifier} deleteFile={deleteFile} />
+    );
   };
 
+  const deleteFile = item => {
+    CameraRoll.deletePhotos([`${item.localIdentifier}`]) //Promise
+      .then(() => {
+        const filteredImages = data.filter(
+          img => img.localIdentifier !== item.localIdentifier,
+        ); //filter deleted images
+        setImages([...filteredImages]);
+      })
+      .catch(err => {
+        console.log(err.message); //error on cancel delete
+      });
+  };
 
   return (
     <View style={styles.carousel}>
@@ -26,6 +40,7 @@ export const List = ({ data }) => {
         snapToAlignment="center"
         snapToInterval={320}
         scrollEventThrottle={16}
+        style={isEnabled && { width: 320 }}
       />
     </View>
   );
@@ -37,7 +52,7 @@ List.propTypes = {
 
 const styles = StyleSheet.create({
   carousel: {
-    height: 350,
-    marginTop: 50,
+    //height: 400,
+    marginTop: 300,
   },
 });

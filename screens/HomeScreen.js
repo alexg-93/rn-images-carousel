@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, Switch } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { List } from '../components/List';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -7,8 +7,12 @@ import CameraRoll from '@react-native-community/cameraroll';
 import { launchCamera } from 'react-native-image-picker';
 
 const HomeScreen = () => {
-  
   const [images, setImages] = useState([]);
+
+  const [isEnabled, setIsEnabled] = useState(false);
+
+
+  const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
   const selectFromGallery = () => {
     ImagePicker.openPicker({
@@ -74,9 +78,19 @@ const HomeScreen = () => {
           onPress={() => selectFromGallery()}>
           <Text style={styles.text}>Open Gallery 🖼️</Text>
         </TouchableOpacity>
+
+        <Switch
+          trackColor={{ false: '#767577', true: '#81b0ff' }}
+          thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
+          ios_backgroundColor="#3e3e3e"
+          onValueChange={toggleSwitch}
+          value={isEnabled}
+        />
       </View>
 
-      {images && images.length > 0 && <List data={images} />}
+      {images && images.length > 0 && (
+        <List data={images} setImages={setImages} isEnabled={isEnabled} />
+      )}
     </View>
   );
 };
@@ -86,6 +100,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor:'#fffaf0'
   },
   text: {
     fontSize: 18,
@@ -100,6 +115,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 10,
+    backgroundColor:'#fff',
   },
   buttons: {
     width: 200,
