@@ -7,6 +7,7 @@ import CameraRoll from '@react-native-community/cameraroll';
 import { launchCamera } from 'react-native-image-picker';
 
 const HomeScreen = () => {
+  
   const [images, setImages] = useState([]);
 
   const selectFromGallery = () => {
@@ -20,30 +21,6 @@ const HomeScreen = () => {
       maxFiles: 10,
     }).then(image => {
       setImages([...images, ...image]);
-    });
-  };
-
-  const openCamera = () => {
-    ImagePicker.openCamera({
-      width: 300,
-      height: 300,
-      cropping: false,
-      includeExif: true,
-      mediaType: 'photo',
-    }).then(image => {
-      GetLocation.getCurrentPosition({
-        enableHighAccuracy: true,
-        timeout: 15000,
-      })
-        .then(location => {
-          image.exif['{GPS}'] = location;
-          setImages([...images, image]);
-          CameraRoll.save(image.path);
-        })
-        .catch(error => {
-          const { code, message } = error;
-          console.warn(code, message);
-        });
     });
   };
 
@@ -89,13 +66,13 @@ const HomeScreen = () => {
     <View style={styles.container}>
       <View style={styles.buttons}>
         <TouchableOpacity style={styles.button} onPress={() => takePhoto()}>
-          <Text style={styles.text}>Take Photo</Text>
+          <Text style={styles.text}>Take Picture 📸</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.button}
           onPress={() => selectFromGallery()}>
-          <Text style={styles.text}>Open Gallery</Text>
+          <Text style={styles.text}>Open Gallery 🖼️</Text>
         </TouchableOpacity>
       </View>
 

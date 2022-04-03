@@ -6,9 +6,11 @@ import PropTypes from 'prop-types';
 const propTypes = PropTypes;
 
 export const List = ({ data }) => {
+
   const renderItem = ({ item }) => {
     return <Card item={item} key={item.localIdentifier} />;
   };
+
 
   return (
     <View style={styles.carousel}>

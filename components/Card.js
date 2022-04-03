@@ -15,8 +15,11 @@ const Card = ({ item }) => {
   const { exif } = item;
 
   const deleteFile = () => {
-    //CameraRoll.deletePhotos([item.uri || `${item.localIdentifier}`]);
-    CameraRoll.deletePhotos([`${item.localIdentifier}`]);
+    try {
+      CameraRoll.deletePhotos([`${item.localIdentifier}`]);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -28,9 +31,7 @@ const Card = ({ item }) => {
               <Image
                 style={styles.image}
                 resizeMode="cover"
-                // source={{ uri: item?.path }}
                 source={{ uri: item?.uri || item?.path }}
-                //source={{uri: `data:image/jpg;base64,${item.base64}`}}
               />
             </TouchableOpacity>
 
