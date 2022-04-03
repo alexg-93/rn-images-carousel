@@ -40,7 +40,7 @@ const Card = ({ item, deleteFile }) => {
             <View style={styles.deleteButton}>
               <Button
                 title="❌"
-               // color="black"
+                // color="black"
                 onPress={() => deleteFile(item)}
               />
             </View>
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
     fontSize: 12,
     fontWeight: 'bold',
-    borderRadius: 5,
+    borderRadius: 10,
     padding: 5,
     borderWidth: 1,
     textAlign: 'center',

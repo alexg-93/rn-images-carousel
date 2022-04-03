@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View,StyleSheet,FlatList,Animated} from 'react-native';
+import { View, StyleSheet, FlatList, Animated } from 'react-native';
 import Card from './Card';
 import PropTypes from 'prop-types';
 import CameraRoll from '@react-native-community/cameraroll';

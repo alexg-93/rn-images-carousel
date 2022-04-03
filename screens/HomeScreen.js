@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View, Switch } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { List } from '../components/List';
 import ImagePicker from 'react-native-image-crop-picker';
 import GetLocation from 'react-native-get-location';
@@ -11,10 +11,9 @@ const HomeScreen = () => {
 
   const [isEnabled, setIsEnabled] = useState(false);
 
-
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
-  const selectFromGallery = () => {
+  const selectFromGallery = useCallback(() => {
     ImagePicker.openPicker({
       width: 300,
       height: 300,
@@ -26,9 +25,9 @@ const HomeScreen = () => {
     }).then(image => {
       setImages([...images, ...image]);
     });
-  };
+  }, [images]);
 
-  const takePhoto = async () => {
+  const takePhoto = useCallback(async () => {
     const options = {
       mediaType: 'photo',
       maxWidth: 8000,
@@ -64,7 +63,7 @@ const HomeScreen = () => {
         const { code, message } = error;
         console.warn(code, message);
       });
-  };
+  }, [images]);
 
   return (
     <View style={styles.container}>
@@ -100,7 +99,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor:'#fffaf0'
+    backgroundColor: '#fffaf0',
   },
   text: {
     fontSize: 18,
@@ -115,7 +114,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 10,
-    backgroundColor:'#fff',
+    backgroundColor: '#fff',
   },
   buttons: {
     width: 200,
