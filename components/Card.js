@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 const propTypes = PropTypes;
+import { Actions } from 'react-native-router-flux';
 
 const Card = ({ item, deleteFile }) => {
   const { exif } = item;
@@ -24,6 +25,12 @@ const Card = ({ item, deleteFile }) => {
                 source={{ uri: item?.uri || item?.path }}
               />
             </View>
+
+            <TouchableOpacity
+              style={styles.mapButton}
+              onPress={() => Actions.map()}>
+              <Text style={styles.textMapButton}>View on map📍</Text>
+            </TouchableOpacity>
 
             {exif && exif['{GPS}'] && (
               <View style={styles.locationContainer}>
@@ -102,6 +109,17 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     justifyContent: 'center',
   },
+  mapButton: {
+    width: 250,
+    height: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+    alignSelf: 'center',
+    marginTop: 10,
+    borderRadius: 5,
+    backgroundColor: '#6495ed',
+  },
+  textMapButton: { fontSize: 18, fontWeight: '500', color: 'white' },
 });
 
 export default Card;

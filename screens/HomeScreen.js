@@ -6,6 +6,7 @@ import GetLocation from 'react-native-get-location';
 import CameraRoll from '@react-native-community/cameraroll';
 import { launchCamera } from 'react-native-image-picker';
 
+
 const HomeScreen = () => {
   const [images, setImages] = useState([]);
 
@@ -97,7 +98,6 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#fffaf0',
   },
