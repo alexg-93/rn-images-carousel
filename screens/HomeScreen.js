@@ -5,7 +5,7 @@ import ImagePicker from 'react-native-image-crop-picker';
 import GetLocation from 'react-native-get-location';
 import CameraRoll from '@react-native-community/cameraroll';
 import { launchCamera } from 'react-native-image-picker';
-
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const HomeScreen = () => {
   const [images, setImages] = useState([]);
@@ -70,22 +70,26 @@ const HomeScreen = () => {
     <View style={styles.container}>
       <View style={styles.buttons}>
         <TouchableOpacity style={styles.button} onPress={() => takePhoto()}>
-          <Text style={styles.text}>Take Picture 📸</Text>
+          <Text style={styles.text}>Take Picture</Text>
+          <Icon name="camera-outline" size={30} color="black" />
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.button}
           onPress={() => selectFromGallery()}>
-          <Text style={styles.text}>Open Gallery 🖼️</Text>
+          <Text style={styles.text}>Open Gallery</Text>
+          <Icon name="images-outline" size={30} color="black" />
         </TouchableOpacity>
 
-        <Switch
-          trackColor={{ false: '#767577', true: '#81b0ff' }}
-          thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
-          ios_backgroundColor="#3e3e3e"
-          onValueChange={toggleSwitch}
-          value={isEnabled}
-        />
+        {images && images.length > 1 && (
+          <Switch
+            trackColor={{ false: '#767577', true: '#81b0ff' }}
+            thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
+            ios_backgroundColor="#3e3e3e"
+            onValueChange={toggleSwitch}
+            value={isEnabled}
+          />
+        )}
       </View>
 
       {images && images.length > 0 && (
@@ -112,9 +116,10 @@ const styles = StyleSheet.create({
     borderColor: 'black',
     borderWidth: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-around',
     marginBottom: 10,
     backgroundColor: '#fff',
+    flexDirection: 'row',
   },
   buttons: {
     width: 200,

@@ -10,6 +10,7 @@ import {
 import PropTypes from 'prop-types';
 const propTypes = PropTypes;
 import { Actions } from 'react-native-router-flux';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const Card = ({ item, deleteFile }) => {
   const { exif } = item;
@@ -29,7 +30,10 @@ const Card = ({ item, deleteFile }) => {
             <TouchableOpacity
               style={styles.mapButton}
               onPress={() => Actions.map()}>
-              <Text style={styles.textMapButton}>View on map📍</Text>
+              <Text style={styles.textMapButton}>
+                View on map{' '}
+                <Icon name="location-outline" size={20} color="white" />
+              </Text>
             </TouchableOpacity>
 
             {exif && exif['{GPS}'] && (
