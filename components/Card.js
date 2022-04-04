@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   StyleSheet,
@@ -13,7 +13,24 @@ import { Actions } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const Card = ({ item, deleteFile }) => {
+  const [location, setLocation] = useState(null);
+
   const { exif } = item;
+  const gps = exif['{GPS}'];
+
+  useEffect(() => {
+    getLocation();
+  }, [exif, gps]);
+
+  const getLocation = () => {
+    if (exif && gps !== null) {
+      setLocation({
+        longitude: exif['{GPS}']?.Longitude || exif['{GPS}']?.longitude,
+        latitude: exif['{GPS}']?.Latitude || exif['{GPS}']?.latitude,
+      });
+    }
+  };
+
   return (
     <>
       <View style={styles.container}>
@@ -26,24 +43,26 @@ const Card = ({ item, deleteFile }) => {
                 source={{ uri: item?.uri || item?.path }}
               />
             </View>
-
-            <TouchableOpacity
-              style={styles.mapButton}
-              onPress={() => Actions.map()}>
-              <Text style={styles.textMapButton}>
-                View on map{' '}
-                <Icon name="location-outline" size={20} color="white" />
-              </Text>
-            </TouchableOpacity>
+            {exif && exif['{GPS}'] && (
+              <TouchableOpacity
+                style={styles.mapButton}
+                onPress={() => Actions.map({ location })}>
+                <Text style={styles.textMapButton}>
+                  View on map{' '}
+                  <Icon name="location-outline" size={20} color="white" />
+                </Text>
+              </TouchableOpacity>
+            )}
 
             {exif && exif['{GPS}'] && (
               <View style={styles.locationContainer}>
                 <Text style={styles.locationText}>
                   Longitude :{' '}
-                  {exif['{GPS}'].Longitude || exif['{GPS}'].longitude}
+                  {exif['{GPS}']?.Longitude || exif['{GPS}']?.longitude}
                 </Text>
                 <Text style={styles.locationText}>
-                  Latitude : {exif['{GPS}'].Latitude || exif['{GPS}'].latitude}
+                  Latitude :{' '}
+                  {exif['{GPS}']?.Latitude || exif['{GPS}']?.latitude}
                 </Text>
               </View>
             )}

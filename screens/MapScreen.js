@@ -9,7 +9,12 @@ import {
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Actions } from 'react-native-router-flux';
 
-const MapScreen = () => {
+import Map from '../components/Map';
+
+//import Config from 'react-native-config';
+//const API_KEY = Config.API_KEY;
+
+const MapScreen = ({ location }) => {
   return (
     <SafeAreaView style={styles.container}>
       <TouchableOpacity
@@ -17,6 +22,7 @@ const MapScreen = () => {
         onPress={() => Actions.home()}>
         <Icon name="arrow-back-circle-outline" size={45} color="black" />
       </TouchableOpacity>
+      <Map location={location} />
     </SafeAreaView>
   );
 };
