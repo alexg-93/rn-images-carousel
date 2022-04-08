@@ -2,28 +2,12 @@ import React, { useState } from 'react';
 import { View, StyleSheet, FlatList, Animated } from 'react-native';
 import Card from './Card';
 import PropTypes from 'prop-types';
-import CameraRoll from '@react-native-community/cameraroll';
 
 const propTypes = PropTypes;
 
-export const List = ({ data, setImages, isEnabled }) => {
+export const List = ({ data, isEnabled }) => {
   const renderItem = ({ item }) => {
-    return (
-      <Card item={item} key={item.localIdentifier} deleteFile={deleteFile} />
-    );
-  };
-
-  const deleteFile = item => {
-    CameraRoll.deletePhotos([`${item.localIdentifier}`]) //Promise
-      .then(() => {
-        const filteredImages = data.filter(
-          img => img.localIdentifier !== item.localIdentifier,
-        ); //filter deleted images
-        setImages([...filteredImages]);
-      })
-      .catch(err => {
-        console.log(err.message); //error on cancel delete
-      });
+    return <Card item={item} key={item.localIdentifier} />;
   };
 
   return (

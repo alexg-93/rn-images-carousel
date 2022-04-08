@@ -1,82 +1,34 @@
 import { StyleSheet, Text, TouchableOpacity, View, Switch } from 'react-native';
 import React, { useState, useEffect, useCallback } from 'react';
 import { List } from '../components/List';
-import ImagePicker from 'react-native-image-crop-picker';
-import GetLocation from 'react-native-get-location';
-import CameraRoll from '@react-native-community/cameraroll';
-import { launchCamera } from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/Ionicons';
 
+import { takePicture, openGallery } from '../redux/Actions/actions';
+import { useDispatch, useSelector } from 'react-redux';
+
 const HomeScreen = () => {
-  const [images, setImages] = useState([]);
+  const dispatch = useDispatch();
+
+  const imagesReducer = useSelector(state => state.imagesReducer);
+  const { images } = imagesReducer;
 
   const [isEnabled, setIsEnabled] = useState(false);
 
   const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
-  const selectFromGallery = useCallback(() => {
-    ImagePicker.openPicker({
-      width: 300,
-      height: 300,
-      cropping: false,
-      multiple: true,
-      includeExif: true,
-      mediaType: 'photo',
-      maxFiles: 10,
-    }).then(image => {
-      setImages([...images, ...image]);
-    });
-  }, [images]);
-
-  const takePhoto = useCallback(async () => {
-    const options = {
-      mediaType: 'photo',
-      maxWidth: 8000,
-      maxHeight: 8000,
-      includeExtra: true,
-      //saveToPhotos: true,
-      storageOptions: {
-        skipBackup: true,
-      },
-    };
-    const result = await launchCamera(options);
-    const { assets } = result;
-    const photos = [...assets];
-
-    GetLocation.getCurrentPosition({
-      enableHighAccuracy: true,
-      timeout: 15000,
-    })
-      .then(async location => {
-        const { longitude, latitude } = location;
-        const localIdentifier = await CameraRoll.save(photos[0].uri); //return new localIndetifier
-
-        photos[0].exif = {};
-        photos[0].exif['{GPS}'] = {
-          Longitude: longitude,
-          Latitude: latitude,
-        };
-
-        photos[0].localIdentifier = localIdentifier;
-        setImages([...images, photos[0]]);
-      })
-      .catch(error => {
-        const { code, message } = error;
-        console.warn(code, message);
-      });
-  }, [images]);
-
   return (
     <View style={styles.container}>
       <View style={styles.buttons}>
-        <TouchableOpacity style={styles.button} onPress={() => takePhoto()}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => dispatch(takePicture())}>
           <Text style={styles.text}>Take Picture</Text>
           <Icon name="camera-outline" size={30} color="black" />
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.button}
-          onPress={() => selectFromGallery()}>
+          onPress={() => dispatch(openGallery())}>
           <Text style={styles.text}>Open Gallery</Text>
           <Icon name="images-outline" size={30} color="black" />
         </TouchableOpacity>
@@ -93,7 +45,7 @@ const HomeScreen = () => {
       </View>
 
       {images && images.length > 0 && (
-        <List data={images} setImages={setImages} isEnabled={isEnabled} />
+        <List data={images} /*setImages={setImages}*/ isEnabled={isEnabled} />
       )}
     </View>
   );

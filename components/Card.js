@@ -11,9 +11,13 @@ import PropTypes from 'prop-types';
 const propTypes = PropTypes;
 import { Actions } from 'react-native-router-flux';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { deleteImage } from '../redux/Actions/actions';
+import { useDispatch } from 'react-redux';
 
-const Card = ({ item, deleteFile }) => {
+const Card = ({ item }) => {
   const [location, setLocation] = useState(null);
+
+  const dispatch = useDispatch();
 
   const { exif } = item;
   const gps = exif['{GPS}'];
@@ -71,7 +75,7 @@ const Card = ({ item, deleteFile }) => {
               <Button
                 title="❌"
                 // color="black"
-                onPress={() => deleteFile(item)}
+                onPress={() => dispatch(deleteImage(item))}
               />
             </View>
           </>
